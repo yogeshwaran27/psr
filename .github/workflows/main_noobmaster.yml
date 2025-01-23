@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Create React App to Azure Web App - noobmaster
+name: Build and deploy React app to Azure Web App - noobmaster
 
 on:
   push:
@@ -14,31 +14,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the code
       - uses: actions/checkout@v4
 
-      # Step 2: Set up Node.js version
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
 
-      # Step 3: Install dependencies and build
-      - name: Install dependencies and build for production
+      - name: Install dependencies and build the app
         run: |
           npm install
-          npm run build # Generate production build in the 'build' folder
+          npm run build
 
-      # Step 4: Zip the build folder for deployment
-      - name: Zip build folder
-        run: zip -r release.zip ./build
+      - name: Zip build folder for deployment
+        run: zip -r build.zip build/
 
-      # Step 5: Upload artifact for deployment job
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: react-app
-          path: release.zip
+          path: build.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -48,22 +43,19 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     
     steps:
-      # Step 1: Download artifact from the build job
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: react-app
 
-      # Step 2: Unzip the build folder
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
+      - name: Unzip build folder
+        run: unzip build.zip
       
-      # Step 3: Deploy the build folder to Azure Web App
-      - name: 'Deploy to Azure Web App'
+      - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'noobmaster'
           slot-name: 'Production'
-          package: ./build # Deploy the 'build' folder
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_4b23c754b5b04788881d26674f6e4c74 }}
+          package: build/
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DD5EF150765B43C1A48EA80253A0A923 }}
