@@ -1,0 +1,32 @@
+# Ignore node_modules
+node_modules
+
+# Ignore build directory
+build
+
+# Ignore .env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignore log files
+*.log
+
+# Ignore Dockerfile
+Dockerfile
+
+# Ignore Docker Compose files
+docker-compose.yml
+docker-compose.override.yml
+
+# Ignore editor directories and files
+.vscode
+.idea
+*.sublime-project
+*.sublime-workspace
+
+# Ignore miscellaneous files
+.DS_Store
+Thumbs.db
